@@ -144,4 +144,6 @@ killall plasmashell && kstart plasmashell
 
 ## Lisans
 
-GPL-3.0+
+Bu proje [GNU General Public License v3.0 veya üstü](LICENSE) altında lisanslanmıştır.
+
+Copyright (C) 2025 Necmettin Bera Çalık

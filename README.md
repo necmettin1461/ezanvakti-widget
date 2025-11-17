@@ -33,7 +33,7 @@ Bu widget, KDE Plasma 6 masaüstü ortamında namaz vakitlerini gösterir.
 
 1. Repoyu klonlayın:
 ```bash
-git clone https://github.com/necm1461/ezan-vakitleri-widget.git
+git clone https://github.com/necmettin1461/ezanvakti-widget.git
 cd ezan-vakitleri-widget
 ```
 

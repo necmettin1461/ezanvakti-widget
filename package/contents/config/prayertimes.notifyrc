@@ -1,0 +1,9 @@
+[Global]
+IconName=clock
+Comment=Namaz Vakitleri
+Name=Ezan Vakitleri
+
+[Event/prayerTimeReminder]
+Name=Namaz Vakti Hatırlatıcı
+Comment=Namaz vakti yaklaşıyor
+Action=Popup

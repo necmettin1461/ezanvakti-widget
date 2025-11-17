@@ -1,0 +1,20 @@
+{
+    "KPackageStructure": "Plasma/Applet",
+    "KPlugin": {
+        "Authors": [
+            {
+                "Email": "necmeddinbera@gmail.com",
+                "Name": "Necmettin Bera Çalık"
+            }
+        ],
+        "Category": "Utilities",
+        "Description": "Diyanet İşleri Başkanlığı verilerinden 209 ülke için namaz vakitlerini gösteren modern KDE widget. Dinamik ülke, şehir ve ilçe seçimi ile bir sonraki vakite saniye saniye canlı geri sayım özelliği sunar.",
+        "Icon": "clock",
+        "Id": "org.kde.plasma.necm1461.prayertimes",
+        "License": "GPL-3.0+",
+        "Name": "Ezan Vakitleri",
+        "Version": "14.61",
+        "Website": "https://github.com/necmettin1461"
+    },
+    "X-Plasma-API-Minimum-Version": "6.0"
+}

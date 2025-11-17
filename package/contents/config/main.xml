@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<kcfg xmlns="http://www.kde.org/standards/kcfg/1.0"
+      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:schemaLocation="http://www.kde.org/standards/kcfg/1.0
+      http://www.kde.org/standards/kcfg/1.0/kcfg.xsd" >
+  <kcfgfile name=""/>
+
+  <group name="General">
+    <entry name="countryCode" type="Int">
+      <default>2</default>
+    </entry>
+    <entry name="countryName" type="String">
+      <default>TÜRKİYE</default>
+    </entry>
+    <entry name="cityCode" type="Int">
+      <default>539</default>
+    </entry>
+    <entry name="districtCode" type="Int">
+      <default>9541</default>
+    </entry>
+    <entry name="cityName" type="String">
+      <default>ISTANBUL</default>
+    </entry>
+    <entry name="districtName" type="String">
+      <default>İSTANBUL</default>
+    </entry>
+    <entry name="cacheDays" type="Int">
+      <default>61</default>
+    </entry>
+    <entry name="notifyImsak" type="Bool">
+      <default>true</default>
+    </entry>
+    <entry name="notifyImsakMinutes" type="Int">
+      <default>15</default>
+    </entry>
+    <entry name="notifySunrise" type="Bool">
+      <default>false</default>
+    </entry>
+    <entry name="notifySunriseMinutes" type="Int">
+      <default>15</default>
+    </entry>
+    <entry name="notifyDhuhr" type="Bool">
+      <default>true</default>
+    </entry>
+    <entry name="notifyDhuhrMinutes" type="Int">
+      <default>15</default>
+    </entry>
+    <entry name="notifyAsr" type="Bool">
+      <default>true</default>
+    </entry>
+    <entry name="notifyAsrMinutes" type="Int">
+      <default>15</default>
+    </entry>
+    <entry name="notifyMaghrib" type="Bool">
+      <default>true</default>
+    </entry>
+    <entry name="notifyMaghribMinutes" type="Int">
+      <default>15</default>
+    </entry>
+    <entry name="notifyIsha" type="Bool">
+      <default>true</default>
+    </entry>
+    <entry name="notifyIshaMinutes" type="Int">
+      <default>15</default>
+    </entry>
+    <entry name="cachedData" type="String">
+      <default></default>
+    </entry>
+    <entry name="cacheTimestamp" type="String">
+      <default></default>
+    </entry>
+  </group>
+</kcfg>

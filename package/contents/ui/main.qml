@@ -88,8 +88,15 @@ PlasmoidItem {
     Connections {
         target: plasmoid.configuration
         function onDistrictCodeChanged() {
-            // Clear memory cache and force network update
+            // Invalidate both memory and disk cache so stale data from the
+            // previous district can never be shown again (e.g. after a restart
+            // or when the network refresh fails).
             cachedPrayerData = null
+            prayerTimes = ({})
+            prayerTimesLoaded = false
+            plasmoid.configuration.cachedData = ""
+            plasmoid.configuration.cacheTimestamp = ""
+            plasmoid.configuration.cachedDistrictCode = 0
             // Force immediate update from network
             updateFromNetwork()
             // Download new cache in background
@@ -101,6 +108,18 @@ PlasmoidItem {
     }
 
     Component.onCompleted: {
+        // If the cached data belongs to a different district than the one
+        // currently configured, drop it before doing anything else.
+        var cachedDistrict = plasmoid.configuration.cachedDistrictCode
+        var currentDistrict = plasmoid.configuration.districtCode
+        if (cachedDistrict !== currentDistrict) {
+            plasmoid.configuration.cachedData = ""
+            plasmoid.configuration.cacheTimestamp = ""
+            plasmoid.configuration.cachedDistrictCode = 0
+            downloadCacheData()
+            return
+        }
+
         // Check if we need to download cache
         var cacheTimestamp = plasmoid.configuration.cacheTimestamp
         if (!cacheTimestamp || cacheTimestamp === "") {
@@ -129,6 +148,12 @@ PlasmoidItem {
                     try {
                         var response = JSON.parse(xhr.responseText)
                         if (response && response.length > 0) {
+                            // Drop the response if the user changed the district
+                            // while this request was in flight.
+                            if (districtCode !== plasmoid.configuration.districtCode) {
+                                return
+                            }
+
                             // Filter data to only keep cacheDays worth of data
                             var today = new Date()
                             var filteredData = []
@@ -146,6 +171,7 @@ PlasmoidItem {
                             // Save to configuration and memory
                             plasmoid.configuration.cachedData = JSON.stringify(filteredData)
                             plasmoid.configuration.cacheTimestamp = new Date().toISOString()
+                            plasmoid.configuration.cachedDistrictCode = districtCode
                             cachedPrayerData = filteredData
                         }
                     } catch (e) {
@@ -173,9 +199,12 @@ PlasmoidItem {
             }
         }
 
-        // Try disk cache
+        // Try disk cache, but only if it belongs to the currently configured
+        // district — otherwise we would show prayer times for the previous city.
         var cachedDataStr = plasmoid.configuration.cachedData
-        if (cachedDataStr && cachedDataStr !== "") {
+        var cachedDistrict = plasmoid.configuration.cachedDistrictCode
+        var currentDistrict = plasmoid.configuration.districtCode
+        if (cachedDataStr && cachedDataStr !== "" && cachedDistrict === currentDistrict) {
             try {
                 cachedPrayerData = JSON.parse(cachedDataStr)
                 var todayData = findTodayInData(cachedPrayerData)
@@ -206,8 +235,17 @@ PlasmoidItem {
                     try {
                         var response = JSON.parse(xhr.responseText)
                         if (response && response.length > 0) {
-                            // Cache the response
+                            // Drop the response if the user changed the district
+                            // while this request was in flight.
+                            if (districtCode !== plasmoid.configuration.districtCode) {
+                                return
+                            }
+
+                            // Cache the response in memory and tag the disk
+                            // cache with the district it belongs to, so a later
+                            // restart can't load it for the wrong city.
                             cachedPrayerData = response
+                            plasmoid.configuration.cachedDistrictCode = districtCode
 
                             var todayData = findTodayInData(response)
 

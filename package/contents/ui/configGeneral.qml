@@ -5,9 +5,11 @@ import org.kde.kirigami as Kirigami
 import org.kde.kcmutils as KCM
 
 KCM.SimpleKCM {
-    property alias cfg_countryCode: countryCombo.currentValue
-    property alias cfg_cityCode: cityCombo.currentValue
-    property alias cfg_districtCode: districtCombo.currentValue
+    // currentValue Qt <= 6.8'de salt-okunur; alias'a yazmak TypeError firlatir.
+    // Bu yuzden duz property + currentIndex yonetimi kullaniliyor.
+    property int cfg_countryCode
+    property int cfg_cityCode
+    property int cfg_districtCode
     property alias cfg_cacheDays: cacheDaysSpinBox.value
     property alias cfg_notifyImsak: notifyImsakCheck.checked
     property alias cfg_notifyImsakMinutes: notifyImsakMinutesSpinBox.value
@@ -56,12 +58,22 @@ KCM.SimpleKCM {
                         })
 
                         // Set current country
+                        var found = false
                         for (var i = 0; i < countries.length; i++) {
                             if (countries[i].code === cfg_countryCode) {
                                 countryCombo.currentIndex = i
                                 loadCities(countries[i].code)
+                                found = true
                                 break
                             }
+                        }
+
+                        // If not found, select first country
+                        if (!found && countries.length > 0) {
+                            countryCombo.currentIndex = 0
+                            cfg_countryCode = countries[0].code
+                            cfg_countryName = countries[0].name
+                            loadCities(countries[0].code)
                         }
                     } catch (e) {
                         console.error("Country loading error:", e)
@@ -174,7 +186,7 @@ KCM.SimpleKCM {
             model: countries
             enabled: !loadingCountries && countries.length > 0
             onActivated: {
-                if (currentIndex >= 0) {
+                if (currentIndex >= 0 && currentIndex < countries.length) {
                     var country = countries[currentIndex]
                     cfg_countryName = country.name
                     cfg_countryCode = country.code
@@ -197,7 +209,7 @@ KCM.SimpleKCM {
             model: cities
             enabled: !loadingCities && cities.length > 0
             onActivated: {
-                if (currentIndex >= 0) {
+                if (currentIndex >= 0 && currentIndex < cities.length) {
                     var city = cities[currentIndex]
                     cfg_cityName = city.name
                     cfg_cityCode = city.code
